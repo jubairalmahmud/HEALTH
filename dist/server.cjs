@@ -55079,14 +55079,15 @@ var dbSurveys = [];
 var dbPartnerApps = [];
 var dbContactMessages = [];
 async function generateCardQRCode(cardId) {
-  const verifyUrl = `${process.env.APP_URL || "http://localhost:3000"}/verify?id=${cardId}`;
+  const baseUrl = (process.env.APP_URL || "https://health.nit.bd").replace(/\/$/, "");
+  const verifyUrl = `${baseUrl}/?verify=${encodeURIComponent(cardId)}`;
   try {
     return await import_qrcode.default.toDataURL(verifyUrl, {
       margin: 1,
       color: { dark: "#0284c7", light: "#ffffff" }
     });
   } catch (err) {
-    return "";
+    return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(verifyUrl)}`;
   }
 }
 async function startServer() {

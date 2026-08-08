@@ -388,9 +388,13 @@ export const MedicalCardPrint: React.FC<Props> = ({ card, showPrintButton = true
                 {card.qrCodeDataUrl ? (
                   <img src={card.qrCodeDataUrl} alt="QR Code" className="w-11 h-11 object-contain" />
                 ) : (
-                  <div className="w-11 h-11 flex items-center justify-center bg-slate-100 text-slate-400">
-                    <QrCode className="w-6 h-6" />
-                  </div>
+                  <img
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
+                      (typeof window !== 'undefined' && window.location && window.location.origin ? window.location.origin : 'https://health.nit.bd') + '/?verify=' + card.cardId
+                    )}`}
+                    alt="QR Code"
+                    className="w-11 h-11 object-contain"
+                  />
                 )}
                 <span className="text-[6.5px] font-mono font-bold mt-0.5 text-slate-700">SCAN TO VERIFY</span>
               </div>

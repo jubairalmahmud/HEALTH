@@ -117,8 +117,12 @@ export default function App() {
     const params = new URLSearchParams(window.location.search);
     const roleParam = params.get('role');
     const tabParam = params.get('tab');
+    const idFromUrl = params.get('id') || params.get('verify') || params.get('card');
+
     if (roleParam || tabParam === 'login' || window.location.hash.includes('role=')) {
       setActiveTab('login');
+    } else if (idFromUrl || tabParam === 'verify') {
+      setActiveTab('verify');
     }
     fetchApiData();
   }, []);

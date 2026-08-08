@@ -712,16 +712,17 @@ let dbSurveys: HealthSurvey[] = [];
 let dbPartnerApps: PartnerApplication[] = [];
 let dbContactMessages: ContactMessage[] = [];
 
-// Pre-generated QR codes
+// Pre-generated QR codes pointing directly to card verification link
 async function generateCardQRCode(cardId: string): Promise<string> {
-  const verifyUrl = `${process.env.APP_URL || 'http://localhost:3000'}/verify?id=${cardId}`;
+  const baseUrl = (process.env.APP_URL || 'https://health.nit.bd').replace(/\/$/, '');
+  const verifyUrl = `${baseUrl}/?verify=${encodeURIComponent(cardId)}`;
   try {
     return await QRCode.toDataURL(verifyUrl, {
       margin: 1,
       color: { dark: '#0284c7', light: '#ffffff' }
     });
   } catch (err) {
-    return '';
+    return `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(verifyUrl)}`;
   }
 }
 

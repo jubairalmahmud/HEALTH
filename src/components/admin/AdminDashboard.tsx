@@ -283,6 +283,7 @@ export const AdminDashboard: React.FC<Props> = ({
   const [cardDesignPreviewTier, setCardDesignPreviewTier] = useState<'Silver' | 'Gold' | 'Platinum'>('Silver');
   const [bulkTabMode, setBulkTabMode] = useState<'generator' | 'editor'>('generator');
   const [pdfDownloading, setPdfDownloading] = useState(false);
+  const [selectedBulkCardIds, setSelectedBulkCardIds] = useState<string[]>([]);
 
   // Sample card details state for Card Design Editor live preview & editing
   const [sampleCardData, setSampleCardData] = useState({
@@ -542,6 +543,15 @@ export const AdminDashboard: React.FC<Props> = ({
       return;
     }
 
+    const targetCards = selectedBulkCardIds.length > 0
+      ? unassignedCards.filter(c => selectedBulkCardIds.includes(c.cardId))
+      : unassignedCards;
+
+    if (targetCards.length === 0) {
+      alert('অনুগ্রহ করে ডাউনলোড করার জন্য অন্তত ১টি কার্ড সিলেক্ট করুন।');
+      return;
+    }
+
     const printContainer = document.getElementById('bulk-cards-pdf-export-container');
     if (!printContainer) {
       alert('পিডিএফ রেন্ডার কন্টেইনার পাওয়া যায়নি।');
@@ -549,8 +559,8 @@ export const AdminDashboard: React.FC<Props> = ({
     }
 
     setPdfDownloading(true);
-    setPdfTargetCount(unassignedCards.length);
-    setPdfDownloadProgressMsg(`মোট ${unassignedCards.length}টি আন-অ্যাসাইনড কার্ডের লেআউট প্রসেস করা হচ্ছে...`);
+    setPdfTargetCount(targetCards.length);
+    setPdfDownloadProgressMsg(`মোট ${targetCards.length}টি ${selectedBulkCardIds.length > 0 ? 'সিলেক্টেড' : 'আন-অ্যাসাইনড'} কার্ডের লেআউট প্রসেস করা হচ্ছে...`);
 
     try {
       // Temporarily display container at fixed top left position
@@ -619,9 +629,11 @@ export const AdminDashboard: React.FC<Props> = ({
       setPdfDownloadProgressMsg(`পিডিএফ ফাইল জেনারেট হচ্ছে...`);
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      const fileName = `DMB_Bulk_Cards_${new Date().toISOString().slice(0, 10)}.pdf`;
+      const fileName = selectedBulkCardIds.length > 0 
+        ? `DMB_Selected_Cards_${selectedBulkCardIds.length}_${new Date().toISOString().slice(0, 10)}.pdf`
+        : `DMB_Bulk_Cards_${new Date().toISOString().slice(0, 10)}.pdf`;
       pdf.save(fileName);
-      setBulkGenSuccessMsg(`✅ ${unassignedCards.length}টি আন-অ্যাসাইনড কার্ডের পিডিএফ ফাইল সফলভাবে ডাউনলোড হয়েছে (${fileName})!`);
+      setBulkGenSuccessMsg(`✅ ${targetCards.length}টি ${selectedBulkCardIds.length > 0 ? 'সিলেক্টেড' : 'আন-অ্যাসাইনড'} কার্ডের পিডিএফ ফাইল সফলভাবে ডাউনলোড হয়েছে (${fileName})!`);
     } catch (err: any) {
       console.error('PDF Generation Error:', err);
       alert('পিডিএফ ফাইল তৈরিতে সমস্যা হয়েছে: ' + (err?.message || 'Unknown Error'));
@@ -3397,6 +3409,20 @@ export const AdminDashboard: React.FC<Props> = ({
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2">
+                      {/* SELECTION STATUS BADGE */}
+                      {selectedBulkCardIds.length > 0 && (
+                        <div className="px-3 py-1 bg-amber-50 border border-amber-200 text-amber-900 rounded-xl font-bold text-xs flex items-center gap-2">
+                          <span>{selectedBulkCardIds.length}টি কার্ড সিলেক্টেড</span>
+                          <button
+                            type="button"
+                            onClick={() => setSelectedBulkCardIds([])}
+                            className="text-amber-700 hover:text-amber-900 underline text-[11px]"
+                          >
+                            ক্লিয়ার
+                          </button>
+                        </div>
+                      )}
+
                       {/* PDF DOWNLOAD BUTTON */}
                       <button
                         onClick={handleDownloadBulkPDF}
@@ -3411,7 +3437,11 @@ export const AdminDashboard: React.FC<Props> = ({
                         ) : (
                           <>
                             <FileDown className="w-4 h-4" />
-                            <span>📄 বাল্ক কার্ড পিডিএফ ডাউনলোড</span>
+                            <span>
+                              {selectedBulkCardIds.length > 0 
+                                ? `📄 সিলেক্টেড (${selectedBulkCardIds.length}) পিডিএফ ডাউনলোড` 
+                                : '📄 সকল বাল্ক কার্ড পিডিএফ ডাউনলোড'}
+                            </span>
                           </>
                         )}
                       </button>
@@ -3420,10 +3450,14 @@ export const AdminDashboard: React.FC<Props> = ({
                       <button
                         onClick={() => {
                           const unassignedCards = cards.filter(c => (c.status || '').toUpperCase() === 'UNASSIGNED');
-                          if (unassignedCards.length === 0) return alert('কোনো বাল্ক আন-অ্যাসাইনড কার্ড পাওয়া যায়নি।');
+                          const targetCards = selectedBulkCardIds.length > 0
+                            ? unassignedCards.filter(c => selectedBulkCardIds.includes(c.cardId))
+                            : unassignedCards;
+
+                          if (targetCards.length === 0) return alert('কোনো কার্ড সিলেক্ট করা হয়নি বা আন-অ্যাসাইনড কার্ড পাওয়া যায়নি।');
                           
                           const headers = ['Card ID', 'Tier', 'Member Limit', 'Status', 'Issue Date'];
-                          const rows = unassignedCards.map(c => [
+                          const rows = targetCards.map(c => [
                             c.cardId,
                             c.cardTier || 'Silver',
                             c.memberLimit || 4,
@@ -3435,34 +3469,112 @@ export const AdminDashboard: React.FC<Props> = ({
                           const encodedUri = encodeURI(csvContent);
                           const link = document.createElement('a');
                           link.setAttribute('href', encodedUri);
-                          link.setAttribute('download', `DMB_Bulk_Cards_${new Date().toISOString().slice(0, 10)}.csv`);
+                          link.setAttribute('download', selectedBulkCardIds.length > 0 
+                            ? `DMB_Selected_Cards_${selectedBulkCardIds.length}_${new Date().toISOString().slice(0, 10)}.csv`
+                            : `DMB_Bulk_Cards_${new Date().toISOString().slice(0, 10)}.csv`);
                           document.body.appendChild(link);
                           link.click();
                           document.body.removeChild(link);
                         }}
                         className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs rounded-xl shadow cursor-pointer transition flex items-center gap-1.5"
                       >
-                        <Download className="w-4 h-4 text-emerald-400" /> এক্সপোর্ট CSV
+                        <Download className="w-4 h-4 text-emerald-400" />
+                        {selectedBulkCardIds.length > 0 ? `সিলেক্টেড CSV (${selectedBulkCardIds.length})` : 'এক্সপোর্ট CSV'}
                       </button>
 
                       <button
                         onClick={() => {
                           const unassigned = cards.filter(c => (c.status || '').toUpperCase() === 'UNASSIGNED');
-                          if (unassigned.length === 0) return alert('প্রিন্ট করার মতো কোনো বাল্ক কার্ড নেই।');
-                          setSelectedPrintCard(unassigned[0]);
+                          const targetCards = selectedBulkCardIds.length > 0
+                            ? unassigned.filter(c => selectedBulkCardIds.includes(c.cardId))
+                            : unassigned;
+                          if (targetCards.length === 0) return alert('প্রিন্ট করার মতো কোনো বাল্ক কার্ড নেই।');
+                          setSelectedPrintCard(targetCards[0]);
                         }}
                         className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow cursor-pointer transition flex items-center gap-1.5"
                       >
-                        <Printer className="w-4 h-4" /> বাল্ক কার্ডস ব্যাচ প্রিন্ট
+                        <Printer className="w-4 h-4" />
+                        {selectedBulkCardIds.length > 0 ? `সিলেক্টেড (${selectedBulkCardIds.length}) ব্যাচ প্রিন্ট` : 'বাল্ক কার্ডস ব্যাচ প্রিন্ট'}
                       </button>
                     </div>
                   </div>
+
+                  {/* QUICK SELECTION BAR */}
+                  {cards.filter(c => (c.status || '').toUpperCase() === 'UNASSIGNED').length > 0 && (
+                    <div className="flex items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-xs">
+                      <div className="flex items-center gap-3 font-medium text-slate-700">
+                        <label className="flex items-center gap-2 cursor-pointer select-none">
+                          <input
+                            type="checkbox"
+                            checked={
+                              cards.filter(c => (c.status || '').toUpperCase() === 'UNASSIGNED').length > 0 &&
+                              selectedBulkCardIds.length === cards.filter(c => (c.status || '').toUpperCase() === 'UNASSIGNED').length
+                            }
+                            onChange={() => {
+                              const unassignedList = cards.filter(c => (c.status || '').toUpperCase() === 'UNASSIGNED');
+                              if (selectedBulkCardIds.length === unassignedList.length) {
+                                setSelectedBulkCardIds([]);
+                              } else {
+                                setSelectedBulkCardIds(unassignedList.map(c => c.cardId));
+                              }
+                            }}
+                            className="w-4 h-4 text-emerald-600 rounded cursor-pointer accent-emerald-600"
+                          />
+                          <span className="font-bold text-slate-900">
+                            {selectedBulkCardIds.length === cards.filter(c => (c.status || '').toUpperCase() === 'UNASSIGNED').length
+                              ? 'সকল কার্ড সিলেক্ট করা আছে'
+                              : 'সকল আন-অ্যাসাইনড কার্ড একসাথে সিলেক্ট করুন'}
+                          </span>
+                        </label>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const unassignedList = cards.filter(c => (c.status || '').toUpperCase() === 'UNASSIGNED');
+                            setSelectedBulkCardIds(unassignedList.map(c => c.cardId));
+                          }}
+                          className="px-2.5 py-1 bg-sky-100 hover:bg-sky-200 text-sky-800 rounded-lg text-[11px] font-bold transition"
+                        >
+                          সকল সিলেক্ট করুন
+                        </button>
+                        {selectedBulkCardIds.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => setSelectedBulkCardIds([])}
+                            className="px-2.5 py-1 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-[11px] font-bold transition"
+                          >
+                            সিলেকশন মুছুন
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   {/* Table */}
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-xs">
                       <thead className="bg-slate-900 text-slate-200 font-bold uppercase">
                         <tr>
+                          <th className="p-3 text-center w-12">
+                            <input
+                              type="checkbox"
+                              checked={
+                                cards.filter(c => (c.status || '').toUpperCase() === 'UNASSIGNED').length > 0 &&
+                                selectedBulkCardIds.length === cards.filter(c => (c.status || '').toUpperCase() === 'UNASSIGNED').length
+                              }
+                              onChange={() => {
+                                const unassignedList = cards.filter(c => (c.status || '').toUpperCase() === 'UNASSIGNED');
+                                if (selectedBulkCardIds.length === unassignedList.length) {
+                                  setSelectedBulkCardIds([]);
+                                } else {
+                                  setSelectedBulkCardIds(unassignedList.map(c => c.cardId));
+                                }
+                              }}
+                              className="w-4 h-4 text-emerald-600 rounded cursor-pointer accent-emerald-600"
+                            />
+                          </th>
                           <th className="p-3">সিরিয়াল & কার্ড আইডি</th>
                           <th className="p-3">টায়ার ক্যাটাগরি</th>
                           <th className="p-3 text-center">মেম্বার লিমিট</th>
@@ -3471,43 +3583,60 @@ export const AdminDashboard: React.FC<Props> = ({
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 font-medium">
-                        {cards.filter(c => c.status === 'UNASSIGNED').length === 0 ? (
+                        {cards.filter(c => (c.status || '').toUpperCase() === 'UNASSIGNED').length === 0 ? (
                           <tr>
-                            <td colSpan={5} className="p-6 text-center text-slate-400">
+                            <td colSpan={6} className="p-6 text-center text-slate-400">
                               বর্তমানে কোনো আন-অ্যাসাইনড বাল্ক কার্ড নেই। উপরের ফর্ম ব্যবহার করে নতুন কার্ড জেনারেট করুন।
                             </td>
                           </tr>
                         ) : (
-                          cards.filter(c => c.status === 'UNASSIGNED').map((c, idx) => (
-                            <tr key={c.cardId} className="hover:bg-slate-50">
-                              <td className="p-3 font-mono">
-                                <span className="text-slate-400 text-[10px] mr-2">#{idx + 1}</span>
-                                <span className="font-bold text-sky-800 text-sm">{c.cardId}</span>
-                              </td>
-                              <td className="p-3">
-                                <span className={`inline-block text-[10px] font-extrabold px-2.5 py-0.5 rounded uppercase ${
-                                  c.cardTier === 'Platinum' ? 'bg-sky-100 text-sky-800' :
-                                  c.cardTier === 'Gold' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-800'
-                                }`}>
-                                  {c.cardTier || 'Silver'}
-                                </span>
-                              </td>
-                              <td className="p-3 text-center font-bold font-mono">{c.memberLimit || 4} জন</td>
-                              <td className="p-3 text-center">
-                                <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full text-[10px] font-bold">
-                                  UNASSIGNED (ব্ল্যাঙ্ক প্রিন্টেড)
-                                </span>
-                              </td>
-                              <td className="p-3 text-center">
-                                <button
-                                  onClick={() => setSelectedPrintCard(c)}
-                                  className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] rounded-lg shadow cursor-pointer transition inline-flex items-center gap-1"
-                                >
-                                  <Printer className="w-3.5 h-3.5" /> প্রিন্ট কার্ড
-                                </button>
-                              </td>
-                            </tr>
-                          ))
+                          cards.filter(c => (c.status || '').toUpperCase() === 'UNASSIGNED').map((c, idx) => {
+                            const isSelected = selectedBulkCardIds.includes(c.cardId);
+                            return (
+                              <tr key={c.cardId} className={`hover:bg-slate-50 transition ${isSelected ? 'bg-amber-50/60' : ''}`}>
+                                <td className="p-3 text-center">
+                                  <input
+                                    type="checkbox"
+                                    checked={isSelected}
+                                    onChange={() => {
+                                      setSelectedBulkCardIds(prev =>
+                                        prev.includes(c.cardId)
+                                          ? prev.filter(id => id !== c.cardId)
+                                          : [...prev, c.cardId]
+                                      );
+                                    }}
+                                    className="w-4 h-4 text-emerald-600 rounded cursor-pointer accent-emerald-600"
+                                  />
+                                </td>
+                                <td className="p-3 font-mono">
+                                  <span className="text-slate-400 text-[10px] mr-2">#{idx + 1}</span>
+                                  <span className="font-bold text-sky-800 text-sm">{c.cardId}</span>
+                                </td>
+                                <td className="p-3">
+                                  <span className={`inline-block text-[10px] font-extrabold px-2.5 py-0.5 rounded uppercase ${
+                                    c.cardTier === 'Platinum' ? 'bg-sky-100 text-sky-800' :
+                                    c.cardTier === 'Gold' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-800'
+                                  }`}>
+                                    {c.cardTier || 'Silver'}
+                                  </span>
+                                </td>
+                                <td className="p-3 text-center font-bold font-mono">{c.memberLimit || 4} জন</td>
+                                <td className="p-3 text-center">
+                                  <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-full text-[10px] font-bold">
+                                    UNASSIGNED (ব্ল্যাঙ্ক প্রিন্টেড)
+                                  </span>
+                                </td>
+                                <td className="p-3 text-center">
+                                  <button
+                                    onClick={() => setSelectedPrintCard(c)}
+                                    className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] rounded-lg shadow cursor-pointer transition inline-flex items-center gap-1"
+                                  >
+                                    <Printer className="w-3.5 h-3.5" /> প্রিন্ট কার্ড
+                                  </button>
+                                </td>
+                              </tr>
+                            );
+                          })
                         )}
                       </tbody>
                     </table>
@@ -8428,10 +8557,14 @@ export const AdminDashboard: React.FC<Props> = ({
       <div id="bulk-cards-pdf-export-container" className="hidden space-y-8 bg-slate-200 p-4 font-sans">
         {(() => {
           const unassignedList = cards.filter(c => (c.status || '').toUpperCase() === 'UNASSIGNED');
+          const exportList = selectedBulkCardIds.length > 0 
+            ? unassignedList.filter(c => selectedBulkCardIds.includes(c.cardId))
+            : unassignedList;
+
           const CARDS_PER_PAGE = 4;
           const pages = [];
-          for (let i = 0; i < unassignedList.length; i += CARDS_PER_PAGE) {
-            pages.push(unassignedList.slice(i, i + CARDS_PER_PAGE));
+          for (let i = 0; i < exportList.length; i += CARDS_PER_PAGE) {
+            pages.push(exportList.slice(i, i + CARDS_PER_PAGE));
           }
 
           if (pages.length === 0) return null;
