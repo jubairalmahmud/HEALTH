@@ -1,0 +1,145 @@
+{
+  "cards": [],
+  "centers": [],
+  "tests": [],
+  "packages": [],
+  "transactions": [],
+  "blogs": [],
+  "notices": [],
+  "bannerSettings": {
+    "badgeText": "PILOT PROJECT",
+    "noticeText": "গোপালগঞ্জ, নড়াইল ও সিলেট জেলায় পাইলট প্রজেক্ট চালু রয়েছে! সিলভার, গোল্ড ও প্লাটিনাম মেম্বারশিপ কার্ডে ৩০% ছাড় পেতে আজই আবেদন করুন।",
+    "hotline": "+8809658887470",
+    "email": "health@nit.bd",
+    "enabled": true,
+    "speed": "normal"
+  },
+  "siteSettings": {
+    "siteTitle": "DMB Health Portal - ডিজিটাল হেলথ কার্ড ও স্বাস্থ্য সেবা",
+    "siteName": "ডিজিটাল হেলথ কার্ড প্লাটফর্ম",
+    "siteTagline": "স্মার্ট স্বাস্থ্য সেবায় আপনার নির্ভরযোগ্য ডিজিটাল হেলথ পার্টনার",
+    "logoText": "DMB Health",
+    "logoUrl": "",
+    "faviconUrl": "",
+    "hotline": "+8809658887470",
+    "phoneSecondary": "01700000000",
+    "phone": "01700000000",
+    "email": "health@nit.bd",
+    "address": "গোপালগঞ্জ সদর, গোপালগঞ্জ, বাংলাদেশ",
+    "facebookUrl": "https://facebook.com",
+    "emergencyNumber": "999",
+    "navLabels": {
+      "home": "হোম",
+      "aboutGroup": "আমাদের ও সেবা ▾",
+      "about": "আমাদের সম্পর্কে",
+      "services": "সেবাসমূহ",
+      "cardGroup": "মেডিক্যাল কার্ড ▾",
+      "medicalCard": "মেডিক্যাল কার্ড",
+      "applyCard": "কার্ডের আবেদন",
+      "notice": "বিজ্ঞপ্তি",
+      "diagnosticGroup": "ডায়াগনস্টিক & টেস্ট ▾",
+      "diagnosticCenter": "ডায়াগনস্টিক সেন্টার",
+      "testPrices": "টেস্ট ফি তালিকা",
+      "packages": "হেলথ প্যাকেজ",
+      "verifyBtn": "কার্ড ভেরিফাই",
+      "loginBtn": "লগইন / পোর্টাল",
+      "moreGroup": "আরও ▾"
+    }
+  },
+  "cardDesignSettings": {
+    "headerTitle": "DIGITAL MEDI BRIDGE",
+    "headerSubtitle": "Healthcare Service Platform & Medical Network",
+    "logoText": "DMB",
+    "logoUrl": "",
+    "slogan": "স্মার্ট স্বাস্থ্য সেবায় আপনার নির্ভরযোগ্য ডিজিটাল হেলথ পার্টনার",
+    "helpline": "+8809658887470",
+    "websiteUrl": "www.health.nit.bd",
+    "footerText": "DMB Healthcare Network, Bangladesh",
+    "disclaimerText": "⚠️ এই কার্ডটি হস্তান্তরযোগ্য নয়। সেবার সময়ে মূল কার্ড ও ভেরিফিকেশন প্রযোজ্য。",
+    "silverTheme": {
+      "presetKey": "classic_silver",
+      "badgeText": "সিলভার কার্ড (Silver Card)"
+    },
+    "goldTheme": {
+      "presetKey": "royal_gold",
+      "badgeText": "গোল্ড কার্ড (Gold Card)"
+    },
+    "platinumTheme": {
+      "presetKey": "royal_platinum",
+      "badgeText": "প্লাটিনাম কার্ড (Platinum Card)"
+    }
+  },
+  "repApplications": [],
+  "repDistributions": [],
+  "smsSettings": {
+    "apiKey": "i71o7813NPx9vgASrBVu",
+    "senderId": "DEHF",
+    "apiUrl": "https://bulksmsbd.net/api/smsapi",
+    "enabled": true,
+    "templates": {
+      "appSubmitted": "প্রিয় {name}, আপনার DMB মেডিক্যাল কার্ডের আবেদন সফলভাবে গ্রহণ করা হয়েছে (কার্ড নম্বর: {cardId})। আপনার মোবাইল নম্বর ({mobile}) দিয়ে পোর্টালে লগইন করতে পারবেন। বর্তমানে এটি অনুমোদনের অপেক্ষায় আছে। ধন্যবাদ।",
+      "appApproved": "অভিনন্দন {name}! আপনার DMB মেডিক্যাল কার্ড ({cardId}) সফলভাবে অনুমোদিত ও অ্যাক্টিভ হয়েছে। পোর্টালে লগইন করে কার্ডটি ডাউনলোড/প্রিন্ট করতে পারবেন। ধন্যবাদ।",
+      "appRejected": "প্রিয় {name}, আপনার DMB মেডিক্যাল কার্ডের আবেদনটি প্রয়োজনীয় তথ্যের অভাবে প্রত্যাখ্যাত (Rejected) হয়েছে। বিস্তারিত জানতে হেল্পলাইনে যোগাযোগ করুন: +8809658887470",
+      "repSubmitted": "প্রিয় {name}, DMB ফিল্ড রিপ্রেজেন্টেটিভ পদে আপনার আবেদনটি সফলভাবে গ্রহণ করা হয়েছে। আবেদন আইডি: {repId}। পেপারস যাচাই শেষে আপনাকে এসএমএস দিয়ে জানানো হবে। ধন্যবাদ।",
+      "repApproved": "অভিনন্দন {name}! DMB ফিল্ড রিপ্রেজেন্টেটিভ হিসেবে আপনার একাউন্ট অ্যাক্টিভ করা হয়েছে। ইউজার আইডি ও পাসওয়ার্ড হিসেবে মোবাইল নম্বর ({mobile}) ব্যবহার করে লগইন করুন।",
+      "repRejected": "প্রিয় {name}, DMB প্রতিনিধি পদে আপনার আবেদনটি বাতিল করা হয়েছে। কারণ: {reason}। হেল্পলাইন: +8809658887470",
+      "otpTemplate": "আপনার DMB মেডিক্যাল পোর্টালে লগইনের ওটিপি (OTP) কোড হলো: {otp}",
+      "customDefault": "প্রিয় {name}, {message}"
+    }
+  },
+  "smsLogs": [],
+  "auditLogs": [],
+  "contactMessages": [],
+  "userPasswords": {
+    "admin@health.nit.bd": "Admin@2026",
+    "admin@digitalmediabridge.com": "Admin@2026",
+    "01700000000": "Admin@2026"
+  },
+  "testimonials": [],
+  "customRoles": [],
+  "pageContent": {
+    "aboutUs": {
+      "title": "ডিজিটাল হেলথ প্রজেক্ট (DMB) সম্পর্কে",
+      "description": "গোপালগঞ্জ, নড়াইল ও সিলেট জেলায় স্বাস্থ্য সেবাকে ডিজিটাল, সাশ্রয়ী ও সর্বসাধারণের হাতের নাগালে পৌঁছে দেওয়ার এক ঐতিহাসিক উদ্যোগ।",
+      "mission": "বাংলাদেশের প্রতিটি পরিবারের কাছে ডিজিটাল মেডিক্যাল মেম্বারশিপ কার্ড পৌঁছে দিয়ে মানসম্মত ডায়াগনস্টিক ও চিকিৎসা সেবায় নির্ধারিত ৩০% ডিসকাউন্ট নিশ্চিত করা।",
+      "vision": "সারা দেশে ১ কোটি প্রান্তিক ও নিম্ন-মধ্যবিত্ত পরিবারকে ডিজিটাল হেলথ কাভারেজের আওতায় নিয়ে আসা।",
+      "mdMessage": "আমাদের লক্ষ্য হলো স্বাস্থ্যখাতে মধ্যস্বত্বভোগীদের অবসান ঘটিয়ে সরাসরি পপুলার, ইবনে সিনা ও ডিজিটাল হেলথ পার্টনারদের সাথে রোগীদের সংযোগ স্থাপন করা।",
+      "achievements": [
+        { "number": "৫,০০০+", "label": "সক্রিয় কার্ডধারী পরিবার" },
+        { "number": "২০+", "label": "অনুমোদিত ডায়াগনস্টিক ও হাসপাতাল" },
+        { "number": "৩০%", "label": "ডায়াগনস্টিক ডিসকাউন্ট" },
+        { "number": "২৪/৭", "label": "জরুরি হেল্পলাইন সাপোর্ট" }
+      ]
+    },
+    "medicalCardInfo": {
+      "title": "DMB ডিজিটাল মেডিক্যাল মেম্বারশিপ কার্ড নির্দেশিকা",
+      "description": "একটি কার্ডেই পুরো পরিবারের স্বাস্থ্য সুরক্ষা। ১ বছর মেয়াদী সিলভার, গোল্ড ও প্লাটিনাম মেম্বারশিপ।",
+      "perks": [
+        { "tier": "Silver Card", "discount": "৩০%", "members": "সর্বোচ্চ ৪ জন সদস্য", "price": "৳২০০ / বছর" },
+        { "tier": "Gold Card", "discount": "৩০%", "members": "সর্বোচ্চ ৬ জন সদস্য", "price": "৳৩৫০ / বছর" },
+        { "tier": "Platinum Card", "discount": "৩০%", "members": "সর্বোচ্চ ৮ জন সদস্য", "price": "৳২০০ / বছর" }
+      ],
+      "coverageDistricts": ["গোপালগঞ্জ সদর", "নড়াইল", "সিলেট সদর", "ঢাকা ধামরাই"],
+      "terms": "কার্ডধারী সদস্য ও তার অনুমোদিত ফ্যামিলি মেম্বারগণ নিবন্ধিত পার্টনার হাসপাতাল ও সেন্টারে কিউআর কোড ভেরিফাই করে তাৎক্ষণিক ছাড় পাবেন।"
+    },
+    "healthTips": [],
+    "eventGallery": []
+  },
+  "jobCirculars": [],
+  "teamMembers": [],
+  "heroBannerSettings": {
+    "badgeText": "গোপালগঞ্জ জেলায় পাইলট প্রজেক্ট ফেজ ১ চালু",
+    "title": "ডিজিটাল মেডিক্যাল কার্ডের মাধ্যমে",
+    "titleHighlight": "স্বাস্থ্যসেবা ও ডায়াগনস্টিক খরচে সাশ্রয়",
+    "description": "Digital Medi Bridge (DMB) হলো একটি আধুনিক Healthcare Network Platform। আমাদের ডিজিটাল মেডিক্যাল কার্ড ব্যবহার করে গোপালগঞ্জ সহ সারাদেশের পার্টনার ডায়াগনস্টিক সেন্টার ও হাসপাতাল থেকে পাচ্ছেন নির্ধারিত ৩০% বিশেষ ছাড়।",
+    "primaryBtnText": "মেডিক্যাল কার্ডের আবেদন করুন",
+    "secondaryBtnText": "কার্ড ভেরিফাই করুন",
+    "heroImage": "",
+    "stat1Value": "৩০% ছাড়",
+    "stat1Label": "ডায়াগনস্টিক টেস্টে নিশ্চিত ছাড়",
+    "stat2Value": "১০,০০০+",
+    "stat2Label": "নিবন্ধিত পরিবার",
+    "stat3Value": "১০০%",
+    "stat3Label": "যাচাইকৃত পার্টনার ল্যাব"
+  }
+}
