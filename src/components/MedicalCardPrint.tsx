@@ -158,10 +158,16 @@ export const MedicalCardPrint: React.FC<Props> = ({ card, showPrintButton = true
   return (
     <div className="flex flex-col items-center gap-4">
       {/* Front & Back Card View Container */}
-      <div id="printable-medical-card" className="printable-card-area w-full max-w-[85.6mm] print:max-w-none space-y-4">
+      <div
+        id={showPrintButton ? "printable-medical-card" : undefined}
+        className={`${showPrintButton ? "printable-card-area" : ""} w-full max-w-[85.6mm] space-y-3`}
+      >
         
         {/* CARD FRONT SIDE (Standard CR80 International Card Size: 85.6mm x 53.98mm) */}
-        <div className={`relative overflow-hidden rounded-xl ${cardBgClass} p-2.5 sm:p-3 w-[85.6mm] max-w-full h-[53.98mm] flex flex-col justify-between shadow-xl border ${borderClass} print:shadow-none cr80-card-box`}>
+        <div
+          className={`relative overflow-hidden rounded-xl ${cardBgClass} p-2.5 sm:p-3 w-[85.6mm] max-w-full h-[53.98mm] flex flex-col justify-between shadow-xl border ${borderClass} print:shadow-none cr80-card-box`}
+          style={{ width: '323px', height: '204px', minWidth: '323px', minHeight: '204px', maxWidth: '323px', maxHeight: '204px', boxSizing: 'border-box' }}
+        >
           
           {/* Subtle Background Watermark Pattern */}
           <div className="absolute -right-8 -bottom-8 opacity-10 pointer-events-none">
@@ -173,9 +179,14 @@ export const MedicalCardPrint: React.FC<Props> = ({ card, showPrintButton = true
             <div className="flex items-center gap-1.5 min-w-0">
               {isVisible('logo') && (
                 logoUrl ? (
-                  <img src={logoUrl} alt="Logo" className="w-6 h-6 rounded-md object-cover border border-white/30 bg-white/10" />
+                  <img
+                    src={logoUrl}
+                    alt="Logo"
+                    className="w-6 h-6 rounded-md object-cover border border-white/30 bg-white/10"
+                    style={{ width: '24px', height: '24px', minWidth: '24px', minHeight: '24px', maxWidth: '24px', maxHeight: '24px', objectFit: 'cover' }}
+                  />
                 ) : (
-                  <div className="w-6 h-6 rounded-md bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/30 text-emerald-300 font-black text-[10px] flex-shrink-0">
+                  <div className="w-6 h-6 rounded-md bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/30 text-emerald-300 font-black text-[10px] flex-shrink-0" style={{ width: '24px', height: '24px' }}>
                     {logoText}
                   </div>
                 )
@@ -217,11 +228,15 @@ export const MedicalCardPrint: React.FC<Props> = ({ card, showPrintButton = true
             {/* Member Photo */}
             {isVisible('photoUrl') && (
               <div className="relative flex-shrink-0">
-                <div className="w-12 h-14 sm:w-13 sm:h-15 rounded-md overflow-hidden border-2 border-white/40 shadow-sm bg-slate-950">
+                <div
+                  className="w-12 h-14 sm:w-13 sm:h-15 rounded-md overflow-hidden border-2 border-white/40 shadow-sm bg-slate-950 flex items-center justify-center"
+                  style={{ width: '48px', height: '56px', minWidth: '48px', minHeight: '56px', maxWidth: '48px', maxHeight: '56px' }}
+                >
                   <img
-                    src={card.photoUrl}
-                    alt={card.memberName}
+                    src={card.photoUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300'}
+                    alt={card.memberName || 'Member'}
                     className="w-full h-full object-cover"
+                    style={{ width: '100%', height: '100%', maxWidth: '100%', maxHeight: '100%', objectFit: 'cover' }}
                     onError={(e) => {
                       (e.target as HTMLElement).setAttribute('src', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300');
                     }}
@@ -248,7 +263,7 @@ export const MedicalCardPrint: React.FC<Props> = ({ card, showPrintButton = true
                 <div>
                   <span className={`text-[7.5px] ${accentTextClass} uppercase tracking-wider block font-medium leading-none`}>Member Name / নাম:</span>
                   <p className="font-bold text-[11px] leading-tight text-white truncate">
-                    {card.memberName}
+                    {card.memberName || 'ব্ল্যাঙ্ক মেম্বারশিপ কার্ড'}
                   </p>
                 </div>
               )}
@@ -279,7 +294,7 @@ export const MedicalCardPrint: React.FC<Props> = ({ card, showPrintButton = true
                     <div>
                       <span className={`text-[7.5px] ${accentTextClass} block leading-none`}>UPAZILA:</span>
                       <span className="font-semibold text-white truncate block text-[8.5px] leading-tight">
-                        {card.upazila}
+                        {card.upazila || 'Gopalganj Sadar'}
                       </span>
                     </div>
                   )}
@@ -291,13 +306,13 @@ export const MedicalCardPrint: React.FC<Props> = ({ card, showPrintButton = true
                   {isVisible('issueDate') && (
                     <div>
                       <span className={`text-[7px] ${accentTextClass} block leading-none`}>ISSUE:</span>
-                      <span className="font-medium text-white leading-tight">{card.issueDate}</span>
+                      <span className="font-medium text-white leading-tight">{card.issueDate || '2026-08-08'}</span>
                     </div>
                   )}
                   {isVisible('expiryDate') && (
                     <div>
                       <span className={`text-[7px] ${accentTextClass} block leading-none`}>EXPIRY:</span>
-                      <span className="font-medium text-amber-300 leading-tight">{card.expiryDate || card.validUntil}</span>
+                      <span className="font-medium text-amber-300 leading-tight">{card.expiryDate || card.validUntil || '2027-08-08'}</span>
                     </div>
                   )}
                 </div>
@@ -324,7 +339,10 @@ export const MedicalCardPrint: React.FC<Props> = ({ card, showPrintButton = true
         </div>
 
         {/* CARD BACK SIDE (Standard CR80 International Card Size: 85.6mm x 53.98mm) */}
-        <div className={`relative overflow-hidden rounded-xl ${cardBgClass} p-2.5 sm:p-3 w-[85.6mm] max-w-full h-[53.98mm] flex flex-col justify-between shadow-xl border ${borderClass} print:shadow-none cr80-card-box`}>
+        <div
+          className={`relative overflow-hidden rounded-xl ${cardBgClass} p-2.5 sm:p-3 w-[85.6mm] max-w-full h-[53.98mm] flex flex-col justify-between shadow-xl border ${borderClass} print:shadow-none cr80-card-box`}
+          style={{ width: '323px', height: '204px', minWidth: '323px', minHeight: '204px', maxWidth: '323px', maxHeight: '204px', boxSizing: 'border-box' }}
+        >
           
           {/* Subtle Background Watermark Pattern */}
           <div className="absolute -left-8 -top-8 opacity-10 pointer-events-none">
@@ -357,7 +375,7 @@ export const MedicalCardPrint: React.FC<Props> = ({ card, showPrintButton = true
                   <div className="grid grid-cols-2 gap-x-1 gap-y-0 text-white/95 text-[7.5px]">
                     {(card.beneficiaries && card.beneficiaries.length > 0
                       ? card.beneficiaries
-                      : [card.memberName]
+                      : [card.memberName || 'প্রধান সেবাপ্রাপ্ত সদস্য']
                     ).slice(0, 8).map((b, i) => (
                       <p key={i} className="truncate">• {b || `সদস্য ${i+1}`}</p>
                     ))}
@@ -384,9 +402,14 @@ export const MedicalCardPrint: React.FC<Props> = ({ card, showPrintButton = true
 
             {/* QR Code Container */}
             {isVisible('qrCode') && (
-              <div className="flex flex-col items-center justify-center p-1 rounded-md bg-white text-slate-900 border border-slate-200 shadow-sm flex-shrink-0">
+              <div className="flex flex-col items-center justify-center p-1 rounded-md bg-white text-slate-900 border border-slate-200 shadow-sm flex-shrink-0" style={{ width: '56px', height: '62px' }}>
                 {card.qrCodeDataUrl ? (
-                  <img src={card.qrCodeDataUrl} alt="QR Code" className="w-11 h-11 object-contain" />
+                  <img
+                    src={card.qrCodeDataUrl}
+                    alt="QR Code"
+                    className="w-11 h-11 object-contain"
+                    style={{ width: '44px', height: '44px', minWidth: '44px', minHeight: '44px', maxWidth: '44px', maxHeight: '44px', objectFit: 'contain' }}
+                  />
                 ) : (
                   <img
                     src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
@@ -394,6 +417,7 @@ export const MedicalCardPrint: React.FC<Props> = ({ card, showPrintButton = true
                     )}`}
                     alt="QR Code"
                     className="w-11 h-11 object-contain"
+                    style={{ width: '44px', height: '44px', minWidth: '44px', minHeight: '44px', maxWidth: '44px', maxHeight: '44px', objectFit: 'contain' }}
                   />
                 )}
                 <span className="text-[6.5px] font-mono font-bold mt-0.5 text-slate-700">SCAN TO VERIFY</span>

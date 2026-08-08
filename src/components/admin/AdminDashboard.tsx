@@ -8597,7 +8597,11 @@ export const AdminDashboard: React.FC<Props> = ({
 
               <div className="grid grid-cols-2 gap-x-4 gap-y-3 justify-items-center my-auto flex-1 items-center">
                 {pageCards.map((c) => (
-                  <div key={c.cardId} className="border border-slate-200 p-2 rounded-xl bg-white flex flex-col items-center shadow-xs">
+                  <div
+                    key={c.cardId}
+                    className="border border-slate-200 p-2 rounded-xl bg-white flex flex-col items-center justify-center shadow-xs overflow-hidden"
+                    style={{ width: '345px', height: '440px', minWidth: '345px', minHeight: '440px', maxWidth: '345px', maxHeight: '440px', boxSizing: 'border-box' }}
+                  >
                     <MedicalCardPrint card={c} cardDesignSettings={cardDesignSettings} showPrintButton={false} />
                   </div>
                 ))}
