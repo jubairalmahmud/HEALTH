@@ -1,0 +1,6 @@
+{
+  "name": "Digital Media Bridge (DMB)",
+  "description": "Healthcare Service Platform & Digital Medical Card Network in Bangladesh starting with Gopalganj Pilot",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

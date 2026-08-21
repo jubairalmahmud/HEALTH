@@ -1,0 +1,59 @@
+name: Deploy DMB Project to Live Server
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+
+    - name: Install Dependencies & Build Application
+      run: |
+        npm install
+        npm run build
+        mkdir -p tmp
+        touch tmp/restart.txt
+
+    - name: Setup SSH
+      if: ${{ env.SSH_KEY != '' && env.SSH_HOST != '' }}
+      uses: webfactory/ssh-agent@v0.9.0
+      env:
+        SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_HOST: ${{ secrets.SSH_HOST }}
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Add Server to Known Hosts
+      if: ${{ env.SSH_KEY != '' && env.SSH_HOST != '' }}
+      env:
+        SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_HOST: ${{ secrets.SSH_HOST }}
+      run: |
+        mkdir -p ~/.ssh
+        ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Deploy to Server via Rsync
+      if: ${{ env.SSH_KEY != '' && env.SSH_HOST != '' }}
+      env:
+        SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_HOST: ${{ secrets.SSH_HOST }}
+      run: |
+        rsync -avz --delete ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.REMOTE_TARGET }} --exclude '.git' --exclude 'node_modules'
+
+    - name: Clean Root Index & Restart Passenger
+      if: ${{ env.SSH_KEY != '' && env.SSH_HOST != '' }}
+      env:
+        SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_HOST: ${{ secrets.SSH_HOST }}
+      run: |
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.REMOTE_TARGET }} && rm -f index.html && mkdir -p tmp && touch tmp/restart.txt"

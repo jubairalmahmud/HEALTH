@@ -1,0 +1,25 @@
+# Set production environment
+SetEnv NODE_ENV production
+SetEnv PASSENGER_APP_ENV production
+
+# Disable Apache directory listing
+Options -Indexes
+
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
+<IfModule mod_passenger.c>
+  PassengerAppRoot "/home/national/health.nit.bd"
+  PassengerBaseURI "/"
+  PassengerNodejs "/opt/alt/nodejs20/bin/node"
+  PassengerAppType node
+  PassengerStartupFile app.js
+  PassengerEnabled On
+</IfModule>
+# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
+
+# DO NOT REMOVE. CLOUDLINUX PASSENGER REWRITE DEFINITIONS
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^(.*)$ app.js/$1 [QSA,L]
+</IfModule>

@@ -1,0 +1,12 @@
+node_modules/
+build/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+data_store.json
+dist/
+tmp/
+data_store.json
+dist/

@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: inline-flex;
+  white-space: nowrap;
+  will-change: transform;
+  animation: marquee 22s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused !important;
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Hide all UI elements except printable card elements */
+  body * {
+    visibility: hidden;
+  }
+
+  #printable-medical-card,
+  #printable-medical-card *,
+  .printable-card-area,
+  .printable-card-area *,
+  #bulk-cards-pdf-export-container,
+  #bulk-cards-pdf-export-container *,
+  #printable-money-receipt,
+  #printable-money-receipt * {
+    visibility: visible;
+  }
+
+  #printable-money-receipt {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 160mm !important;
+    margin: 0 auto !important;
+    padding: 15px !important;
+    background: #ffffff !important;
+    border: 1px solid #94a3b8 !important;
+  }
+
+  #printable-medical-card,
+  .printable-card-area {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 85.6mm !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  #bulk-cards-pdf-export-container {
+    display: block !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+
+  .pdf-page-block {
+    page-break-after: always;
+    break-after: page;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 5mm;
+  }
+}
+
+/* International ID Card CR80 Standard Styling (85.6mm x 53.98mm) */
+.cr80-card-box {
+  width: 85.6mm;
+  height: 53.98mm;
+  box-sizing: border-box;
+  border-radius: 3.18mm;
+}
+
+
